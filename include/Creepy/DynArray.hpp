@@ -2,6 +2,7 @@
 
 #include <cstring>
 #include <Creepy/Arena.hpp>
+#include <Creepy/Assert.hpp>
 
 namespace Creepy{
 
@@ -46,5 +47,19 @@ namespace Creepy{
     constexpr inline void DynArray_Clear(DynArray<T>& dynArr){
         dynArr.count = 0;
         // std::memset(dynArr.element, 0, dynArr.capacity * sizeof(T));
+    }
+
+    template <typename T>
+    constexpr inline T& DynArray_At(DynArray<T>& dynArr, uint32_t idx){
+        ASSERT_MSG(idx < dynArr.count, "Index out of bound: {} -> {}", dynArr.count, idx);
+
+        return dynArr.element[idx];
+    }
+
+    template <typename T>
+    constexpr inline const T& DynArray_At(const DynArray<T>& dynArr, uint32_t idx){
+        ASSERT_MSG(idx < dynArr.count, "Index out of bound: {} -> {}", dynArr.count, idx);
+        
+        return dynArr.element[idx];
     }
 }
