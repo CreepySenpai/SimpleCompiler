@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <variant>
+#include <Creepy/Arena.hpp>
 #include <Creepy/DynArray.hpp>
 
 namespace Creepy {
@@ -22,26 +23,39 @@ namespace Creepy {
 
     using NodeValue = std::variant<int32_t, int64_t, uint32_t, uint64_t, uintptr_t>;
 
+    using NodeHandle = uint32_t;
 
     struct Node{
-        uint64_t nodeID{};
+        // Use for default alloc dyn arr contain inputNode and outputNode
+        static constexpr inline uint32_t DEFAULT_ALLOC_INPUTNODE = 10;
+        static constexpr inline uint32_t DEFAULT_ALLOC_OUTPUTNODE = 10;
+
+        NodeHandle nodeHandle{};
         NodeType nodeType{NodeType::None};
         NodeValueType nodeValueType{NodeValueType::None};
         NodeValue nodeValue{0};
 
-        DynArray<Node*> inputNodes;
-        DynArray<Node*> outputNodes;
+        DynArray<NodeHandle> inputNodes;
+        DynArray<NodeHandle> outputNodes;
     };
 
+    struct NodeContainer{
+        Arena nodeArena;
+        DynArray<Node> nodes;
+    };
 
-    struct Arena;
+    NodeContainer NodeContainer_CreateNodeContainer(Arena nodeArena, uint32_t maxNode);
 
-    Node* Node_CreateStartNode(Arena& arena);
-    Node* Node_CreateReturnNode(Arena& arena, Node* controlNode, Node* dataNode);
-    Node* Node_CreateConstantNode(Arena& arena, NodeValueType type, NodeValue val);
+    NodeHandle Node_CreateStartNode(NodeContainer& nodeContainer);
+    
+    NodeHandle Node_CreateReturnNode(NodeContainer& nodeContainer, NodeHandle controlNodeHandle, NodeHandle dataNodeHandle);
+    
+    NodeHandle Node_CreateConstantNode(NodeContainer& nodeContainer, NodeValueType valType, NodeValue val);
 
-    Node* Node_GetControlNode(const Node* returnNode);
-    Node* Node_GetExpresionNode(const Node* returnNode);
+    NodeHandle Node_GetControlNode(NodeContainer& nodeContainer, NodeHandle returnNodeHandle);
+    NodeHandle Node_GetExpresionNode(NodeContainer& nodeContainer, NodeHandle returnNodeHandle);
 
-    bool Node_IsControlFlow(const Node* node);
+    bool Node_IsControlFlow(NodeContainer& nodeContainer, NodeHandle nodeHandle);
+
+    void Node_PrintNodeInfo(const NodeContainer& nodeContainer, NodeHandle nodeHandle);
 }
