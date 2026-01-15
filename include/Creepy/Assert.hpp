@@ -12,10 +12,10 @@ namespace Creepy{
             std::abort();                                               \
         }
 
-    
-    #define ASSERT_MSG(cond, msg)                                                           \
+
+    #define ASSERT_MSG(cond, msg, ...)                                                           \
         if(!(cond)){                                                                        \
-            LOG("Assertion failed at: {}:{} with msg {}", __FILE__, __LINE__, msg);         \
+            LOG("Assertion failed at: {}:{} with msg {}", __FILE__, __LINE__, std::format(msg, ##__VA_ARGS__));         \
             std::abort();                                                                   \
         }
 
@@ -23,7 +23,7 @@ namespace Creepy{
 
     #define ASSERT(cond)
 
-    #define ASSERT_MSG(cond, msg)
+    #define ASSERT_MSG(cond, msg, ...)
 
 #endif
 
