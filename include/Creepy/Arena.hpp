@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <Creepy/Assert.hpp>
 
 namespace Creepy {
     struct Arena{
@@ -13,7 +14,6 @@ namespace Creepy {
     template <typename T>
     constexpr inline T* Arena_Alloc(Arena& arena){
         if(arena.count + sizeof(T) >= arena.capacity){
-            // asm("int3");
             return nullptr;
         }
         
@@ -25,14 +25,16 @@ namespace Creepy {
 
     template <typename T>
     constexpr inline T* Arena_AllocArray(Arena& arena, uint32_t count){
-        if(arena.count + (sizeof(T) * count) >= arena.capacity){
-            // asm("int3");
+        const uint64_t sizeToAlloc = (sizeof(T) * count);
+
+        if((arena.count + sizeToAlloc) >= arena.capacity){
+            LOG("Too big bro: {} - {}", arena.capacity, (arena.count + sizeToAlloc));
             return nullptr;
         }
 
         T*obj = std::start_lifetime_as_array<T>(static_cast<uint8_t*>(arena.mem) + arena.count, count);
 
-        arena.count += (sizeof(T) * count);
+        arena.count += sizeToAlloc;
 
         return obj;
     }
@@ -44,9 +46,7 @@ namespace Creepy {
             return;
         }
 
-        if(arena.count + remain >= arena.capacity){
-            // TODO: Some error agnostic
-        }
+        ASSERT_MSG((arena.count + remain) < arena.capacity, "Hum bro align make size bigger than capacity");
 
         arena.count += remain;
     }
