@@ -35,8 +35,8 @@ namespace Creepy {
         NodeValueType nodeValueType{NodeValueType::None};
         NodeValue nodeValue{0};
 
-        DynArray<NodeHandle> inputNodes;
-        DynArray<NodeHandle> outputNodes;
+        DynArray<NodeHandle> inputNodes{};
+        DynArray<NodeHandle> outputNodes{};
     };
 
     struct NodeContainer{
@@ -57,5 +57,6 @@ namespace Creepy {
 
     bool Node_IsControlFlow(NodeContainer& nodeContainer, NodeHandle nodeHandle);
 
+    void Node_PrintNodeInfo(const Node& node);
     void Node_PrintNodeInfo(const NodeContainer& nodeContainer, NodeHandle nodeHandle);
 }

@@ -4,17 +4,21 @@
 namespace Creepy{
 
     NodeContainer NodeContainer_CreateNodeContainer(Arena nodeArena, uint32_t maxNode) {
-        return {
-            .nodeArena = nodeArena,
-            .nodes = DynArray_Create<Node>(nodeArena, maxNode)
+        NodeContainer nodeContainer{
+            .nodeArena = nodeArena
         };
+
+        nodeContainer.nodes = DynArray_Create<Node>(nodeContainer.nodeArena, maxNode);
+
+        return nodeContainer;
     }
 
     static void Node_AddCurrentNodeHandleToAllInputNode(NodeContainer& nodeContainer, NodeHandle currentNodeHandle){
         Node& currentNode = DynArray_At(nodeContainer.nodes, currentNodeHandle);
-        
+
         for(uint32_t i{}; i < currentNode.inputNodes.count; ++i){
-            const uint32_t inputNodeHandle = DynArray_At(currentNode.inputNodes, i);
+            const NodeHandle inputNodeHandle = DynArray_At(currentNode.inputNodes, i);
+
             Node& inputNode = DynArray_At(nodeContainer.nodes, inputNodeHandle);
             
             DynArray_Add(inputNode.outputNodes, nodeContainer.nodeArena, currentNodeHandle);
@@ -48,16 +52,13 @@ namespace Creepy{
             .outputNodes = DynArray_Create<NodeHandle>(nodeContainer.nodeArena, Node::DEFAULT_ALLOC_OUTPUTNODE)
         };
 
-        std::println("Non1");
         DynArray_Add(returnNode.inputNodes, nodeContainer.nodeArena, controlNodeHandle);
-        std::println("Non2");
+
         DynArray_Add(returnNode.inputNodes, nodeContainer.nodeArena, dataNodeHandle);
-        std::println("Non3");
+
         DynArray_Add(nodeContainer.nodes, nodeContainer.nodeArena, returnNode);
-        std::println("Non4");
 
         Node_AddCurrentNodeHandleToAllInputNode(nodeContainer, currentNodeHandle);
-        std::println("Non5");
 
         return currentNodeHandle;
     }
@@ -108,22 +109,20 @@ namespace Creepy{
         return false;
     }
 
-    void Node_PrintNodeInfo(const NodeContainer& nodeContainer, NodeHandle nodeHandle) {
-        const Node& node = DynArray_At(nodeContainer.nodes, nodeHandle);
-
+    void Node_PrintNodeInfo(const Node& node) {
         std::println("---------------------------");
         std::println("  nodeHandle: {}", node.nodeHandle);
         std::println("  nodeType: {}", (uint32_t)node.nodeType);
         std::println("  nodeValueType: {}", (uint32_t)node.nodeValueType);
         // std::println("  nodeValue: {}", node.nodeValue);
 
-        std::print("  inputNodes: ");
+        std::print("  inputNodes: {} {} ", (uint64_t)node.inputNodes.element, node.inputNodes.count);
         for(uint32_t i{}; i < node.inputNodes.count; ++i){
             std::print(" {} ", node.inputNodes.element[i]);
         }
         std::println();
 
-        std::print("  outputNodes: ");
+        std::print("  outputNodes: {} {}", (uint64_t)node.outputNodes.element, node.outputNodes.count);
         for(uint32_t i{}; i < node.outputNodes.count; ++i){
             std::print(" {} ", node.outputNodes.element[i]);
         }
@@ -131,5 +130,10 @@ namespace Creepy{
         std::println();
 
         std::println("---------------------------");
+    }
+
+    void Node_PrintNodeInfo(const NodeContainer& nodeContainer, NodeHandle nodeHandle) {
+        const Node& node = DynArray_At(nodeContainer.nodes, nodeHandle);
+        Node_PrintNodeInfo(node);
     }
 }
