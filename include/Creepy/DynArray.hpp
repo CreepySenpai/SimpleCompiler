@@ -38,7 +38,7 @@ namespace Creepy{
             dynArr.element = newMem;
             dynArr.capacity = newCapacity;
         }
-
+        
         dynArr.element[dynArr.count] = ele;
         ++dynArr.count;
     }
