@@ -4,6 +4,45 @@
 #include <cstring>
 #include <charconv>
 
+namespace {
+    static bool isNumber(char c){
+        return c >= '0' && c <= '9';
+    }
+
+    static bool isWhiteSpace(char c){
+        return (c == ' ') || (c == '\t') || (c == '\n');
+    }
+
+    static bool isLetter(char c){
+        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+    }
+
+    static bool isPunctuation(char c){
+        static constexpr char punctualTable[] = "=;[]<>(){}+-/*!";
+        for(char p : punctualTable){
+            if(p == c){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // Check char in alphabet
+    static bool isAlphabet(char c){
+        return isLetter(c) || isNumber(c);
+    }
+
+    // We only accept str + _ to be 
+    static bool isIDStart(char c){
+        return isAlphabet(c) || c == '_';
+    }
+
+    static bool isIDLetter(char c){
+        return isLetter(c) || c == '_';
+    }
+}
+
 namespace Creepy{
     Lexer Lexer_CreateLexer(DynArray<char> inputData) {
         return {
