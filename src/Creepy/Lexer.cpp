@@ -96,4 +96,48 @@ namespace Creepy{
 
         return num;
     }
+
+    StringView Lexer_GetNextID(Lexer& lexer){
+        const uint32_t start = lexer.currentReadPos;
+
+        while(isIDLetter(Lexer_PeekCurrentChar(lexer))){
+            ++lexer.currentReadPos;
+        }
+
+        return StringView{
+            .ptr = &lexer.inputData.element[start],
+            .count = lexer.currentReadPos - start
+        };
+    }
+
+    StringView Lexer_GetNextPunctual(Lexer& lexer){
+        return {
+            .ptr = &lexer.inputData.element[lexer.currentReadPos],
+            .count = 1
+        };
+    }
+
+
+    StringView Lexer_GetAnyNextToken(Lexer& lexer) {
+        if(Lexer_IsEOF(lexer)){
+            return {};
+        }
+
+        if(isIDStart(Lexer_PeekCurrentChar(lexer))){
+            return Lexer_GetNextID(lexer);
+        }
+
+        if(isNumber(Lexer_PeekCurrentChar(lexer))){
+            return Lexer_GetNextNumber(lexer);
+        }
+
+        if(isPunctuation(Lexer_PeekCurrentChar(lexer))){
+            return Lexer_GetNextPunctual(lexer);
+        }
+
+        return {
+            .ptr = &lexer.inputData.element[lexer.currentReadPos],
+            .count = 1
+        };
+    }
 }
