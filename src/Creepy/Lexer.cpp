@@ -30,28 +30,10 @@ namespace Creepy{
     }
 
     bool Lexer_IsWhiteSpace(const Lexer& lexer) {
-        return Lexer_PeekNextChar(lexer) <= ' ';
+        return Lexer_PeekCurrentChar(lexer) <= ' ';
     }
 
-    static bool isNumber(char c){
-        return c >= '0' && c <= '9';
-    }
-
-    static bool isLetter(char c){
-        return (c == '_') || isNumber(c) || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
-    }
-
-    bool Lexer_IsNumber(const Lexer& lexer) {
-        const char nextChar = Lexer_PeekNextChar(lexer);
-        return isNumber(nextChar);
-    }
-
-    bool Lexer_IsLetter(const Lexer& lexer) {
-        const char nextChar = Lexer_PeekNextChar(lexer);
-        return isLetter(nextChar);
-    }
-
-    char Lexer_PeekNextChar(const Lexer& lexer) {
+    char Lexer_PeekCurrentChar(const Lexer& lexer) {
         if(Lexer_IsEOF(lexer)){
             return Lexer::TERMINATOR;
         }
@@ -59,14 +41,9 @@ namespace Creepy{
         return lexer.inputData.element[lexer.currentReadPos];
     }
 
-    char Lexer_GetNextChar(Lexer& lexer) {
-        const char nextChar = Lexer_PeekNextChar(lexer);
-        ++lexer.currentReadPos;
-        return nextChar;
-    }
 
     void Lexer_SkipWhiteSpace(Lexer& lexer) {
-        while(Lexer_IsWhiteSpace(lexer)){
+        while(isWhiteSpace(Lexer_PeekCurrentChar(lexer))){
             ++lexer.currentReadPos;
         }
     }
@@ -93,38 +70,29 @@ namespace Creepy{
         return true;
     }
 
-    struct Viewer{
-        const char* startData{nullptr};
-        uint32_t count{};
-    };
 
-    Viewer Lexer_GetNextStringAsNumber(Lexer& lexer){
+    StringView Lexer_GetNextNumber(Lexer& lexer){
         const uint32_t start = lexer.currentReadPos;
         
-        while(isNumber(Lexer_GetNextChar(lexer))){
-
+        while(isNumber(Lexer_PeekCurrentChar(lexer))){
+            ++lexer.currentReadPos;
         }
 
-        Viewer viewer{
-            .startData = &lexer.inputData.element[start],
+        StringView strView{
+            .ptr = &lexer.inputData.element[start],
             .count = lexer.currentReadPos - start
         };
 
-        return viewer;
+        return strView;
     }
 
-    int64_t Lexer_GetNextNumber(Lexer& lexer){
-        Viewer viewer = Lexer_GetNextStringAsNumber(lexer);
+    int64_t Lexer_ParseToNumber(Lexer& lexer){
+        StringView strView = Lexer_GetNextNumber(lexer);
         int64_t num{};
 
-        auto err = std::from_chars(viewer.startData, viewer.startData + viewer.count, num);
+        auto err = std::from_chars(strView.ptr, strView.ptr + strView.count, num);
 
-        // ASSERT(true);
-
-        // if(err.ec == std::errc::invalid_argument){
-        //     LOG("Input is not a number");
-        // }
-        // else if()
+        ASSERT_MSG((err.ec == std::errc::invalid_argument), "Lexer: Invalid input");
 
         return num;
     }

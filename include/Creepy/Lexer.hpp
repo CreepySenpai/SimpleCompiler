@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Creepy/DynArray.hpp>
+#include <Creepy/StringView.hpp>
 
 namespace Creepy{
 
@@ -19,10 +20,11 @@ namespace Creepy{
     bool Lexer_IsNumber(const Lexer& lexer);
     bool Lexer_IsLetter(const Lexer& lexer);
 
-    char Lexer_PeekNextChar(const Lexer& lexer);
-    char Lexer_GetNextChar(Lexer& lexer);
+    char Lexer_PeekCurrentChar(const Lexer& lexer);
     void Lexer_SkipWhiteSpace(Lexer& lexer);
 
-
+    
     bool Lexer_IsMatch(Lexer& lexer, const char* syntax);
+
+    StringView Lexer_GetAnyNextToken(Lexer& lexer);
 }
