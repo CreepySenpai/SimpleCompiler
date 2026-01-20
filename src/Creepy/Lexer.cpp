@@ -33,13 +33,15 @@ namespace {
         return isLetter(c) || isNumber(c);
     }
 
-    // We only accept str + _ to be 
+    // Only accept str + _ to be start of identifier
     static bool isIDStart(char c){
-        return isAlphabet(c) || c == '_';
+        return isLetter(c) || c == '_';
     }
 
+    // Accept Alphabet + _
     static bool isIDLetter(char c){
-        return isLetter(c) || c == '_';
+        // return isLetter(c) || c == '_';
+        return isAlphabet(c) || c == '_';
     }
 }
 
