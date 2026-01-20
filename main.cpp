@@ -2,6 +2,8 @@
 #include <Creepy/Assert.hpp>
 #include <Creepy/DynArray.hpp>
 #include <Creepy/Node.hpp>
+#include <Creepy/Lexer.hpp>
+#include <Creepy/Formater.hpp>
 
 int main(){
 
@@ -23,6 +25,14 @@ int main(){
         Creepy::Node_PrintNodeInfo(nodeContainer, i);
     }
     
+    char srcCode[] = "return 69;";
+
+    Creepy::Lexer lexer = Creepy::Lexer_CreateLexer(Creepy::StringView{.ptr = srcCode, .count = sizeof(srcCode) - 1});
     
+    std::println("Val ne1: {}", Creepy::Lexer_GetAnyNextToken(lexer));
+    std::println("Val ne2: {}", Creepy::Lexer_GetAnyNextToken(lexer));
+    std::println("Val ne3: {}", Creepy::Lexer_GetAnyNextToken(lexer));
+    std::println("Val ne4: {}", Creepy::Lexer_GetAnyNextToken(lexer));
+
     return 0;
 }
