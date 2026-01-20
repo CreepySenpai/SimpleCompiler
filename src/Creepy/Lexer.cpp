@@ -83,7 +83,6 @@ namespace Creepy{
 
         if(lexer.currentReadPos + syntaxLen > lexer.inputData.count){
             LOG("Input too long");
-
             return false;
         }
 
@@ -94,6 +93,24 @@ namespace Creepy{
         }
 
         return true;
+    }
+
+    bool Lexer_IsMatchX(Lexer& lexer, const char* syntax){
+        if(!Lexer_IsMatch(lexer, syntax)){
+            return false;
+        }
+
+        const auto tempSave = lexer.currentReadPos;
+        const size_t syntaxLen = std::strlen(syntax);
+
+        lexer.currentReadPos += syntaxLen;
+        if(!isIDLetter(Lexer_PeekCurrentChar(lexer))){
+            return true;
+        }
+
+        lexer.currentReadPos = tempSave;
+
+        return false;
     }
 
 
@@ -146,24 +163,31 @@ namespace Creepy{
         };
     }
 
-
     StringView Lexer_GetAnyNextToken(Lexer& lexer) {
         if(Lexer_IsEOF(lexer)){
+            LOG("Gonna ret EOF");
             return {};
         }
 
+        Lexer_SkipWhiteSpace(lexer);
+
         if(isIDStart(Lexer_PeekCurrentChar(lexer))){
+            LOG("Gonna ret isIDStart");
             return Lexer_GetNextID(lexer);
         }
 
         if(isNumber(Lexer_PeekCurrentChar(lexer))){
+            LOG("Gonna ret isNumber");
             return Lexer_GetNextNumber(lexer);
         }
 
         if(isPunctuation(Lexer_PeekCurrentChar(lexer))){
+            LOG("Gonna ret isPunctuation");
             return Lexer_GetNextPunctual(lexer);
         }
 
+        // Return unknown char??
+        LOG("Gonna ret unknown char");
         return {
             .ptr = &lexer.inputData.ptr[lexer.currentReadPos],
             .count = 1
