@@ -34,7 +34,7 @@ namespace Creepy {
         NodeType nodeType{NodeType::None};
         NodeValueType nodeValueType{NodeValueType::None};
         NodeValue nodeValue{0};
-
+        
         DynArray<NodeHandle> inputNodes{};
         DynArray<NodeHandle> outputNodes{};
     };
@@ -44,6 +44,7 @@ namespace Creepy {
         DynArray<Node> nodes;
     };
 
+    
     NodeContainer NodeContainer_CreateNodeContainer(Arena nodeArena, uint32_t maxNode);
 
     NodeHandle Node_CreateStartNode(NodeContainer& nodeContainer);
