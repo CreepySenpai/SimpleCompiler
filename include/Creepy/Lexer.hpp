@@ -8,12 +8,11 @@ namespace Creepy{
     struct Lexer{
         static constexpr char TERMINATOR = 0xff;
 
-        DynArray<char> inputData;
+        StringView inputData;
         uint32_t currentReadPos;
     };
 
-    Lexer Lexer_CreateLexer(DynArray<char> inputData);
-    Lexer Lexer_CreateLexer(const char* str, Arena& arena);
+    Lexer Lexer_CreateLexer(StringView inputData);
 
     bool Lexer_IsEOF(const Lexer& lexer);
     bool Lexer_IsWhiteSpace(const Lexer& lexer);

@@ -44,24 +44,11 @@ namespace {
 }
 
 namespace Creepy{
-    Lexer Lexer_CreateLexer(DynArray<char> inputData) {
+    Lexer Lexer_CreateLexer(StringView inputData) {
         return {
             .inputData = inputData,
             .currentReadPos = 0
         };
-    }
-
-    Lexer Lexer_CreateLexer(const char* str, Arena& arena) {
-        const size_t strSize = std::strlen(str);
-        Lexer lexer{
-            .inputData = DynArray_Create<char>(arena, strSize),
-            .currentReadPos = 0
-        };
-
-        std::memcpy(lexer.inputData.element, str, strSize);
-        lexer.inputData.count = strSize;
-
-        return lexer;
     }
 
     bool Lexer_IsEOF(const Lexer& lexer) {
@@ -77,7 +64,7 @@ namespace Creepy{
             return Lexer::TERMINATOR;
         }
 
-        return lexer.inputData.element[lexer.currentReadPos];
+        return lexer.inputData.ptr[lexer.currentReadPos];
     }
 
 
@@ -99,12 +86,10 @@ namespace Creepy{
         }
 
         for(uint32_t i{}; i < syntaxLen; ++i){
-            if(lexer.inputData.element[lexer.inputData.count + i] != syntax[i]){
+            if(lexer.inputData.ptr[lexer.inputData.count + i] != syntax[i]){
                 return false;
             }
         }
-
-        // lexer.currentReadPos += syntaxLen;
 
         return true;
     }
@@ -118,7 +103,7 @@ namespace Creepy{
         }
 
         StringView strView{
-            .ptr = &lexer.inputData.element[start],
+            .ptr = &lexer.inputData.ptr[start],
             .count = lexer.currentReadPos - start
         };
 
@@ -131,7 +116,7 @@ namespace Creepy{
 
         auto err = std::from_chars(strView.ptr, strView.ptr + strView.count, num);
 
-        ASSERT_MSG((err.ec == std::errc::invalid_argument), "Lexer: Invalid input");
+        ASSERT_MSG((err.ec != std::errc::invalid_argument), "Lexer: Invalid input");
 
         return num;
     }
@@ -144,14 +129,17 @@ namespace Creepy{
         }
 
         return StringView{
-            .ptr = &lexer.inputData.element[start],
+            .ptr = &lexer.inputData.ptr[start],
             .count = lexer.currentReadPos - start
         };
     }
 
     StringView Lexer_GetNextPunctual(Lexer& lexer){
+        const uint32_t startPos = lexer.currentReadPos;
+        ++lexer.currentReadPos;
+
         return {
-            .ptr = &lexer.inputData.element[lexer.currentReadPos],
+            .ptr = &lexer.inputData.ptr[startPos],
             .count = 1
         };
     }
@@ -175,7 +163,7 @@ namespace Creepy{
         }
 
         return {
-            .ptr = &lexer.inputData.element[lexer.currentReadPos],
+            .ptr = &lexer.inputData.ptr[lexer.currentReadPos],
             .count = 1
         };
     }
