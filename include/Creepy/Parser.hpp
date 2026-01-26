@@ -9,11 +9,10 @@ namespace Creepy{
         StringView srcCode;
         Lexer lexer;
         NodeContainer nodeContainer;
+        NodeHandle startNode;
     };
 
     Parser Parser_CreateParser(StringView srcCode, Arena nodeArena, uint32_t maxNodeCanStore);
 
-    Node Parser_ParseToReturnNode(Parser& parser);
-    
-    Node Parser_ParseToConstantNode(Parser& parser);
+    NodeHandle Parser_Parse(Parser& parser);
 }
