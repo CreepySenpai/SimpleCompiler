@@ -17,7 +17,7 @@ namespace Creepy{
     bool Lexer_IsEOF(const Lexer& lexer);
     bool Lexer_IsWhiteSpace(const Lexer& lexer);
     bool Lexer_IsNumber(const Lexer& lexer);
-    bool Lexer_IsLetter(const Lexer& lexer);
+    // bool Lexer_IsLetter(const Lexer& lexer);
 
     char Lexer_PeekCurrentChar(const Lexer& lexer);
     void Lexer_SkipWhiteSpace(Lexer& lexer);

@@ -61,6 +61,10 @@ namespace Creepy{
         return Lexer_PeekCurrentChar(lexer) <= ' ';
     }
 
+    bool Lexer_IsNumber(const Lexer& lexer) {
+        return isNumber(Lexer_PeekCurrentChar(lexer));
+    }
+
     char Lexer_PeekCurrentChar(const Lexer& lexer) {
         if(Lexer_IsEOF(lexer)){
             return Lexer::TERMINATOR;
