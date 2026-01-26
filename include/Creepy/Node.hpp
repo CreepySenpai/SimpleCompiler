@@ -46,6 +46,7 @@ namespace Creepy {
         // Use for default alloc dyn arr contain inputNode and outputNode
         static constexpr inline uint32_t DEFAULT_ALLOC_INPUTNODE = 10;
         static constexpr inline uint32_t DEFAULT_ALLOC_OUTPUTNODE = 10;
+        static constexpr inline NodeHandle INVALID_NODE_HANDLE = 0xffffffff;
 
         NodeHandle nodeHandle{};
         NodeType nodeType{NodeType::None};
