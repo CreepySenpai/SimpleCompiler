@@ -91,7 +91,8 @@ namespace Creepy{
         }
 
         for(uint32_t i{}; i < syntaxLen; ++i){
-            if(lexer.inputData.ptr[lexer.inputData.count + i] != syntax[i]){
+            if(lexer.inputData.ptr[lexer.currentReadPos + i] != syntax[i]){
+                LOG("Diff on: {} = {} - {}, Expect: {}", i, lexer.inputData.ptr[lexer.currentReadPos + i], syntax[i], syntax);
                 return false;
             }
         }
