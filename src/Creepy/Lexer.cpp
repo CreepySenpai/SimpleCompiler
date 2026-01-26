@@ -107,7 +107,7 @@ namespace Creepy{
         }
 
         const size_t syntaxLen = std::strlen(syntax);
-        
+
         lexer.currentReadPos -= syntaxLen;
 
         return false;
@@ -127,17 +127,6 @@ namespace Creepy{
         };
 
         return strView;
-    }
-
-    int64_t Lexer_ParseToNumber(Lexer& lexer){
-        StringView strView = Lexer_GetNextNumber(lexer);
-        int64_t num{};
-
-        auto err = std::from_chars(strView.ptr, strView.ptr + strView.count, num);
-
-        ASSERT_MSG((err.ec != std::errc::invalid_argument), "Lexer: Invalid input");
-
-        return num;
     }
 
     StringView Lexer_GetNextID(Lexer& lexer){
@@ -192,5 +181,17 @@ namespace Creepy{
             .ptr = &lexer.inputData.ptr[lexer.currentReadPos],
             .count = 1
         };
+    }
+
+    
+    int64_t Lexer_ParseToNumber(Lexer& lexer){
+        StringView strView = Lexer_GetNextNumber(lexer);
+        int64_t num{};
+
+        auto err = std::from_chars(strView.ptr, strView.ptr + strView.count, num);
+
+        ASSERT_MSG((err.ec != std::errc::invalid_argument), "Lexer: Invalid input");
+
+        return num;
     }
 }

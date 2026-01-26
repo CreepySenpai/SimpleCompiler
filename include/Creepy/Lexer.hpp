@@ -29,4 +29,7 @@ namespace Creepy{
     bool Lexer_IsMatchExact(Lexer& lexer, const char* syntax);
 
     StringView Lexer_GetAnyNextToken(Lexer& lexer);
+
+    
+    int64_t Lexer_ParseToNumber(Lexer& lexer);
 }
