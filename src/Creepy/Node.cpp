@@ -63,7 +63,7 @@ namespace Creepy{
         return currentNodeHandle;
     }
 
-    NodeHandle NodeContainer_CreateConstantNode(NodeContainer& nodeContainer, NodeValueType valType, NodeValue val) {
+    NodeHandle NodeContainer_CreateConstantNode(NodeContainer& nodeContainer, NodeHandle startNode, NodeValueType valType, NodeValue val) {
         const NodeHandle currentNodeHandle = nodeContainer.nodes.count;
 
         Node constantNode{
@@ -75,7 +75,11 @@ namespace Creepy{
             .outputNodes = DynArray_Create<NodeHandle>(nodeContainer.nodeArena, Node::DEFAULT_ALLOC_OUTPUTNODE)
         };
 
+        DynArray_Add(constantNode.inputNodes, nodeContainer.nodeArena, startNode);
+
         DynArray_Add(nodeContainer.nodes, nodeContainer.nodeArena, constantNode);
+
+        NodeContainer_AddCurrentNodeHandleToAllInputNode(nodeContainer, currentNodeHandle);
 
         return currentNodeHandle;
     }

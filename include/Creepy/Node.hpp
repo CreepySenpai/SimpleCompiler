@@ -71,7 +71,7 @@ namespace Creepy {
     
     NodeHandle NodeContainer_CreateReturnNode(NodeContainer& nodeContainer, NodeHandle controlNodeHandle, NodeHandle dataNodeHandle);
     
-    NodeHandle NodeContainer_CreateConstantNode(NodeContainer& nodeContainer, NodeValueType valType, NodeValue val);
+    NodeHandle NodeContainer_CreateConstantNode(NodeContainer& nodeContainer, NodeHandle startNode, NodeValueType valType, NodeValue val);
 
     NodeHandle NodeContainer_GetControlNode(NodeContainer& nodeContainer, NodeHandle returnNodeHandle);
     NodeHandle NodeContainer_GetExpresionNode(NodeContainer& nodeContainer, NodeHandle returnNodeHandle);

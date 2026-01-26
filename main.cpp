@@ -16,7 +16,7 @@ int main(){
     std::println("Done A");
     auto startNode = Creepy::NodeContainer_CreateStartNode(nodeContainer);
     std::println("Done B");
-    auto constantNode = Creepy::NodeContainer_CreateConstantNode(nodeContainer, Creepy::NodeValueType::Uint32, Creepy::UInt32{69});
+    auto constantNode = Creepy::NodeContainer_CreateConstantNode(nodeContainer, startNode, Creepy::NodeValueType::Uint32, Creepy::UInt32{69});
     std::println("Done C");
     auto endNode = Creepy::NodeContainer_CreateReturnNode(nodeContainer, startNode, constantNode);
     std::println("Done D");
