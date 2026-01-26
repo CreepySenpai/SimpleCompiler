@@ -39,6 +39,8 @@ namespace Creepy {
         DynArray<NodeHandle> outputNodes{};
     };
 
+    void Node_PrintNodeInfo(const Node& node);
+
     struct NodeContainer{
         Arena nodeArena;
         DynArray<Node> nodes;
@@ -47,17 +49,16 @@ namespace Creepy {
     
     NodeContainer NodeContainer_CreateNodeContainer(Arena nodeArena, uint32_t maxNode);
 
-    NodeHandle Node_CreateStartNode(NodeContainer& nodeContainer);
+    NodeHandle NodeContainer_CreateStartNode(NodeContainer& nodeContainer);
     
-    NodeHandle Node_CreateReturnNode(NodeContainer& nodeContainer, NodeHandle controlNodeHandle, NodeHandle dataNodeHandle);
+    NodeHandle NodeContainer_CreateReturnNode(NodeContainer& nodeContainer, NodeHandle controlNodeHandle, NodeHandle dataNodeHandle);
     
-    NodeHandle Node_CreateConstantNode(NodeContainer& nodeContainer, NodeValueType valType, NodeValue val);
+    NodeHandle NodeContainer_CreateConstantNode(NodeContainer& nodeContainer, NodeValueType valType, NodeValue val);
 
-    NodeHandle Node_GetControlNode(NodeContainer& nodeContainer, NodeHandle returnNodeHandle);
-    NodeHandle Node_GetExpresionNode(NodeContainer& nodeContainer, NodeHandle returnNodeHandle);
+    NodeHandle NodeContainer_GetControlNode(NodeContainer& nodeContainer, NodeHandle returnNodeHandle);
+    NodeHandle NodeContainer_GetExpresionNode(NodeContainer& nodeContainer, NodeHandle returnNodeHandle);
 
-    bool Node_IsControlFlow(NodeContainer& nodeContainer, NodeHandle nodeHandle);
+    bool NodeContainer_IsControlFlow(NodeContainer& nodeContainer, NodeHandle nodeHandle);
 
-    void Node_PrintNodeInfo(const Node& node);
-    void Node_PrintNodeInfo(const NodeContainer& nodeContainer, NodeHandle nodeHandle);
+    void NodeContainer_PrintNodeInfo(const NodeContainer& nodeContainer, NodeHandle nodeHandle);
 }

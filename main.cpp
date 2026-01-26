@@ -14,15 +14,15 @@ int main(){
     Creepy::NodeContainer nodeContainer = Creepy::NodeContainer_CreateNodeContainer(Creepy::Arena{.mem = buffer, .count = 0, .capacity = ARENA_SIZE}, 100);
 
     std::println("Done A");
-    auto startNode = Creepy::Node_CreateStartNode(nodeContainer);
+    auto startNode = Creepy::NodeContainer_CreateStartNode(nodeContainer);
     std::println("Done B");
-    auto constantNode = Creepy::Node_CreateConstantNode(nodeContainer, Creepy::NodeValueType::Uint32, 69);
+    auto constantNode = Creepy::NodeContainer_CreateConstantNode(nodeContainer, Creepy::NodeValueType::Uint32, 69);
     std::println("Done C");
-    auto endNode = Creepy::Node_CreateReturnNode(nodeContainer, startNode, constantNode);
+    auto endNode = Creepy::NodeContainer_CreateReturnNode(nodeContainer, startNode, constantNode);
     std::println("Done D");
 
     for(uint32_t i{}; i < nodeContainer.nodes.count; ++i){
-        Creepy::Node_PrintNodeInfo(nodeContainer, i);
+        Creepy::NodeContainer_PrintNodeInfo(nodeContainer, i);
     }
     
     char srcCode[] = "return 69;";

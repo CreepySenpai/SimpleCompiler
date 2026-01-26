@@ -13,7 +13,7 @@ namespace Creepy{
         return nodeContainer;
     }
 
-    static void Node_AddCurrentNodeHandleToAllInputNode(NodeContainer& nodeContainer, NodeHandle currentNodeHandle){
+    static void NodeContainer_AddCurrentNodeHandleToAllInputNode(NodeContainer& nodeContainer, NodeHandle currentNodeHandle){
         Node& currentNode = DynArray_At(nodeContainer.nodes, currentNodeHandle);
 
         for(uint32_t i{}; i < currentNode.inputNodes.count; ++i){
@@ -25,7 +25,7 @@ namespace Creepy{
         }
     }
 
-    NodeHandle Node_CreateStartNode(NodeContainer& nodeContainer) {
+    NodeHandle NodeContainer_CreateStartNode(NodeContainer& nodeContainer) {
         const NodeHandle currentNodeHandle = nodeContainer.nodes.count;
 
         Node startNode{
@@ -41,7 +41,7 @@ namespace Creepy{
         return currentNodeHandle;
     }
 
-    NodeHandle Node_CreateReturnNode(NodeContainer& nodeContainer, NodeHandle controlNodeHandle, NodeHandle dataNodeHandle) {
+    NodeHandle NodeContainer_CreateReturnNode(NodeContainer& nodeContainer, NodeHandle controlNodeHandle, NodeHandle dataNodeHandle) {
         const NodeHandle currentNodeHandle = nodeContainer.nodes.count;
 
         Node returnNode{
@@ -58,12 +58,12 @@ namespace Creepy{
 
         DynArray_Add(nodeContainer.nodes, nodeContainer.nodeArena, returnNode);
 
-        Node_AddCurrentNodeHandleToAllInputNode(nodeContainer, currentNodeHandle);
+        NodeContainer_AddCurrentNodeHandleToAllInputNode(nodeContainer, currentNodeHandle);
 
         return currentNodeHandle;
     }
 
-    NodeHandle Node_CreateConstantNode(NodeContainer& nodeContainer, NodeValueType valType, NodeValue val) {
+    NodeHandle NodeContainer_CreateConstantNode(NodeContainer& nodeContainer, NodeValueType valType, NodeValue val) {
         const NodeHandle currentNodeHandle = nodeContainer.nodes.count;
 
         Node constantNode{
@@ -80,7 +80,7 @@ namespace Creepy{
         return currentNodeHandle;
     }
 
-    NodeHandle Node_GetControlNode(NodeContainer& nodeContainer, NodeHandle returnNodeHandle) {
+    NodeHandle NodeContainer_GetControlNode(NodeContainer& nodeContainer, NodeHandle returnNodeHandle) {
         const Node& returnNode = DynArray_At(nodeContainer.nodes, returnNodeHandle);
 
         ASSERT_MSG(returnNode.nodeType == NodeType::Return, "Expect returnNode");
@@ -88,7 +88,7 @@ namespace Creepy{
         return returnNode.inputNodes.element[0];
     }
 
-    NodeHandle Node_GetExpresionNode(NodeContainer& nodeContainer, NodeHandle returnNodeHandle) {
+    NodeHandle NodeContainer_GetExpresionNode(NodeContainer& nodeContainer, NodeHandle returnNodeHandle) {
         const Node& returnNode = DynArray_At(nodeContainer.nodes, returnNodeHandle);
 
         ASSERT_MSG(returnNode.nodeType == NodeType::Return, "Expect returnNode");
@@ -96,7 +96,7 @@ namespace Creepy{
         return returnNode.inputNodes.element[1];
     }
 
-    bool Node_IsControlFlow(NodeContainer& nodeContainer, NodeHandle nodeHandle) {
+    bool NodeContainer_IsControlFlow(NodeContainer& nodeContainer, NodeHandle nodeHandle) {
         const Node& node = DynArray_At(nodeContainer.nodes, nodeHandle);
 
         switch (node.nodeType) {
@@ -132,7 +132,7 @@ namespace Creepy{
         std::println("---------------------------");
     }
 
-    void Node_PrintNodeInfo(const NodeContainer& nodeContainer, NodeHandle nodeHandle) {
+    void NodeContainer_PrintNodeInfo(const NodeContainer& nodeContainer, NodeHandle nodeHandle) {
         const Node& node = DynArray_At(nodeContainer.nodes, nodeHandle);
         Node_PrintNodeInfo(node);
     }
