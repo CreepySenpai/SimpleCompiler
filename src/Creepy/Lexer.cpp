@@ -92,23 +92,23 @@ namespace Creepy{
             }
         }
 
+        lexer.currentReadPos += syntaxLen;
+
         return true;
     }
 
-    bool Lexer_IsMatchX(Lexer& lexer, const char* syntax){
+    bool Lexer_IsMatchExact(Lexer& lexer, const char* syntax){
         if(!Lexer_IsMatch(lexer, syntax)){
             return false;
         }
 
-        const auto tempSave = lexer.currentReadPos;
-        const size_t syntaxLen = std::strlen(syntax);
-
-        lexer.currentReadPos += syntaxLen;
         if(!isIDLetter(Lexer_PeekCurrentChar(lexer))){
             return true;
         }
 
-        lexer.currentReadPos = tempSave;
+        const size_t syntaxLen = std::strlen(syntax);
+        
+        lexer.currentReadPos -= syntaxLen;
 
         return false;
     }

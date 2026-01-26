@@ -22,8 +22,11 @@ namespace Creepy{
     char Lexer_PeekCurrentChar(const Lexer& lexer);
     void Lexer_SkipWhiteSpace(Lexer& lexer);
 
-    
+    // Check match syntax, if true then advance read pos to end syntax
     bool Lexer_IsMatch(Lexer& lexer, const char* syntax);
+
+    // Check match syntax and not follow by id letter, if true then advance read pos to end syntax
+    bool Lexer_IsMatchExact(Lexer& lexer, const char* syntax);
 
     StringView Lexer_GetAnyNextToken(Lexer& lexer);
 }
