@@ -21,7 +21,24 @@ namespace Creepy {
         Pointer
     };
 
-    using NodeValue = std::variant<int32_t, int64_t, uint32_t, uint64_t, uintptr_t>;
+
+    struct SInt32{
+        int32_t val{};
+    };
+
+    struct SInt64{
+        int64_t val{};
+    };
+
+    struct UInt32{
+        uint32_t val{};
+    };
+
+    struct UInt64{
+        uint64_t val{};
+    };
+
+    using NodeValue = std::variant<std::monostate, SInt32, SInt64, UInt32, UInt64, uintptr_t>;
 
     using NodeHandle = uint32_t;
 
@@ -33,7 +50,7 @@ namespace Creepy {
         NodeHandle nodeHandle{};
         NodeType nodeType{NodeType::None};
         NodeValueType nodeValueType{NodeValueType::None};
-        NodeValue nodeValue{0};
+        NodeValue nodeValue{};
         
         DynArray<NodeHandle> inputNodes{};
         DynArray<NodeHandle> outputNodes{};

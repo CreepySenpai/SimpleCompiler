@@ -9,7 +9,7 @@ namespace Creepy{
         };
 
         nodeContainer.nodes = DynArray_Create<Node>(nodeContainer.nodeArena, maxNode);
-
+        
         return nodeContainer;
     }
 
