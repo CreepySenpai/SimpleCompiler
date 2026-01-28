@@ -14,6 +14,8 @@ namespace Creepy{
     }
 
     static void NodeContainer_AddCurrentNodeHandleToAllInputNode(NodeContainer& nodeContainer, NodeHandle currentNodeHandle){
+        ASSERT_MSG(currentNodeHandle != Node::INVALID_NODE_HANDLE, "Invalid node handle to add");
+
         Node& currentNode = DynArray_At(nodeContainer.nodes, currentNodeHandle);
 
         for(uint32_t i{}; i < currentNode.inputNodes.count; ++i){
@@ -42,6 +44,10 @@ namespace Creepy{
     }
 
     NodeHandle NodeContainer_CreateReturnNode(NodeContainer& nodeContainer, NodeHandle controlNodeHandle, NodeHandle dataNodeHandle) {
+        ASSERT_MSG(controlNodeHandle != Node::INVALID_NODE_HANDLE, "Invalid control node handle");
+        ASSERT_MSG(dataNodeHandle != Node::INVALID_NODE_HANDLE, "Invalid data node handle");
+
+
         const NodeHandle currentNodeHandle = nodeContainer.nodes.count;
 
         Node returnNode{
@@ -63,7 +69,9 @@ namespace Creepy{
         return currentNodeHandle;
     }
 
-    NodeHandle NodeContainer_CreateConstantNode(NodeContainer& nodeContainer, NodeHandle startNode, NodeValueType valType, NodeValue val) {
+    NodeHandle NodeContainer_CreateConstantNode(NodeContainer& nodeContainer, NodeHandle startNodeHandle, NodeValueType valType, NodeValue val) {
+        ASSERT_MSG(startNodeHandle != Node::INVALID_NODE_HANDLE, "Invalid start node handle");
+    
         const NodeHandle currentNodeHandle = nodeContainer.nodes.count;
 
         Node constantNode{
@@ -75,7 +83,7 @@ namespace Creepy{
             .outputNodes = DynArray_Create<NodeHandle>(nodeContainer.nodeArena, Node::DEFAULT_ALLOC_OUTPUTNODE)
         };
 
-        DynArray_Add(constantNode.inputNodes, nodeContainer.nodeArena, startNode);
+        DynArray_Add(constantNode.inputNodes, nodeContainer.nodeArena, startNodeHandle);
 
         DynArray_Add(nodeContainer.nodes, nodeContainer.nodeArena, constantNode);
 
@@ -85,6 +93,8 @@ namespace Creepy{
     }
 
     NodeHandle NodeContainer_GetControlNode(NodeContainer& nodeContainer, NodeHandle returnNodeHandle) {
+        ASSERT_MSG(returnNodeHandle != Node::INVALID_NODE_HANDLE, "Invalid return node handle");
+
         const Node& returnNode = DynArray_At(nodeContainer.nodes, returnNodeHandle);
 
         ASSERT_MSG(returnNode.nodeType == NodeType::Return, "Expect returnNode");
@@ -93,6 +103,8 @@ namespace Creepy{
     }
 
     NodeHandle NodeContainer_GetExpresionNode(NodeContainer& nodeContainer, NodeHandle returnNodeHandle) {
+        ASSERT_MSG(returnNodeHandle != Node::INVALID_NODE_HANDLE, "Invalid return node handle");
+
         const Node& returnNode = DynArray_At(nodeContainer.nodes, returnNodeHandle);
 
         ASSERT_MSG(returnNode.nodeType == NodeType::Return, "Expect returnNode");
@@ -101,6 +113,8 @@ namespace Creepy{
     }
 
     bool NodeContainer_IsControlFlow(NodeContainer& nodeContainer, NodeHandle nodeHandle) {
+        ASSERT_MSG(nodeHandle != Node::INVALID_NODE_HANDLE, "Invalid node handle");
+
         const Node& node = DynArray_At(nodeContainer.nodes, nodeHandle);
 
         switch (node.nodeType) {
@@ -137,6 +151,8 @@ namespace Creepy{
     }
 
     void NodeContainer_PrintNodeInfo(const NodeContainer& nodeContainer, NodeHandle nodeHandle) {
+        ASSERT_MSG(nodeHandle != Node::INVALID_NODE_HANDLE, "Invalid node handle");
+
         const Node& node = DynArray_At(nodeContainer.nodes, nodeHandle);
         Node_PrintNodeInfo(node);
     }

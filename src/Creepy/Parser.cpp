@@ -36,6 +36,7 @@ namespace Creepy{
 
         if(!Lexer_IsEOF(parser.lexer)){
             Parser_SyntaxError(parser, "unexpect");
+            return Node::INVALID_NODE_HANDLE;
         }
 
         return val;
@@ -78,8 +79,13 @@ namespace Creepy{
     }
     
     NodeHandle Parser_ParseToConstantNode(Parser& parser) {
-        const uint64_t num = Lexer_ParseToNumber(parser.lexer);
-        return NodeContainer_CreateConstantNode(parser.nodeContainer, parser.startNode, NodeValueType::Uint64, UInt64{num});
+        Optional<uint64_t> num = Lexer_ParseToNumber(parser.lexer);
+        
+        if(num.hasValue){
+            return NodeContainer_CreateConstantNode(parser.nodeContainer, parser.startNode, NodeValueType::Uint64, UInt64{num.value});
+        }
+
+        return Node::INVALID_NODE_HANDLE;
     }
 
     void Parser_CheckSyntax(Parser& parser, const char* syntax) {
