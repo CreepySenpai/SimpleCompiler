@@ -2,6 +2,7 @@
 
 #include <Creepy/DynArray.hpp>
 #include <Creepy/StringView.hpp>
+#include <Creepy/Optional.hpp>
 
 namespace Creepy{
 
@@ -30,6 +31,5 @@ namespace Creepy{
 
     StringView Lexer_GetAnyNextToken(Lexer& lexer);
 
-    
-    int64_t Lexer_ParseToNumber(Lexer& lexer);
+    Optional<uint64_t> Lexer_ParseToNumber(Lexer& lexer);
 }

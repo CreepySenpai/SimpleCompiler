@@ -86,7 +86,7 @@ namespace Creepy{
         const size_t syntaxLen = std::strlen(syntax);
 
         if(lexer.currentReadPos + syntaxLen > lexer.inputData.count){
-            LOG("Input too long");
+            LOG("Input too long: {}", syntax);
             return false;
         }
 
@@ -189,13 +189,19 @@ namespace Creepy{
     }
 
     
-    int64_t Lexer_ParseToNumber(Lexer& lexer){
+    Optional<uint64_t> Lexer_ParseToNumber(Lexer& lexer){
+        Optional<uint64_t> num{
+            .hasValue = false
+        };
+
         StringView strView = Lexer_GetNextNumber(lexer);
-        int64_t num{};
 
-        auto err = std::from_chars(strView.ptr, strView.ptr + strView.count, num);
+        ASSERT_MSG(strView.count > 0 && strView.ptr[0] != '0', "Number cannot start with zero");
 
+        auto err = std::from_chars(strView.ptr, strView.ptr + strView.count, num.value);
         ASSERT_MSG((err.ec != std::errc::invalid_argument), "Lexer: Invalid input");
+        
+        num.hasValue = true;
 
         return num;
     }
