@@ -15,13 +15,13 @@ void testParser();
 
 int main(){
 
-    testNodeContainer();
+    // testNodeContainer();
     
-    LOG("--------------------------------------------------------------");
+    // LOG("--------------------------------------------------------------");
 
-    testLexer();
+    // testLexer();
     
-    LOG("--------------------------------------------------------------");
+    // LOG("--------------------------------------------------------------");
     
     testParser();
 
@@ -63,12 +63,18 @@ void testParser() {
     uint8_t* buffer = new uint8_t[ARENA_SIZE]{};
     std::memset(buffer, 0, ARENA_SIZE);
 
-    char srcCode[] = "return 69;";
+    char srcCode[] = "return 69;";       // Test ok
+    // char srcCode[] = "return 0;";       // Test ok
+    // char srcCode[] = "ret;";             // Test fail
+    // char srcCode[] = "return 0123";       // Test fail
+    // char srcCode[] = "return -69;";       // Test fail
+    // char srcCode[] = "return 69";         // Test fail
+    // char srcCode[] = "return69";
+    // char srcCode[] = "return 1;}";
 
     Creepy::Parser parser = Creepy::Parser_CreateParser(Creepy::StringView{.ptr = srcCode, .count = sizeof(srcCode) - 1}, 
         Creepy::Arena{.mem = buffer, .count = 0, .capacity = ARENA_SIZE}, 
         200);
-
     
     auto nodeParsed = Creepy::Parser_Parse(parser);
 
